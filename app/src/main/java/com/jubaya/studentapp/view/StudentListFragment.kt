@@ -15,7 +15,7 @@ import com.jubaya.studentapp.viewmodel.ListViewModel
 class StudentListFragment : Fragment() {
     private lateinit var binding:FragmentStudentListBinding
     private lateinit var viewModel:ListViewModel
-    private val studenrListAdapter = StudentListAdapter(arrayListOf())
+    private val studentListAdapter = StudentListAdapter(arrayListOf())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,14 +33,22 @@ class StudentListFragment : Fragment() {
         viewModel.refresh()
 
         binding.recView.layoutManager = LinearLayoutManager(context)
-        binding.recView.adapter = studenrListAdapter
+        binding.recView.adapter = studentListAdapter
 
         observeViewModel()
+
+        binding.refreshlayout.setOnRefreshListener {
+            viewModel.refresh()
+            binding.recView.visibility = View.GONE
+            binding.txtError.visibility = View.GONE
+            binding.progressLoad.visibility = View.VISIBLE
+            binding.refreshlayout.isRefreshing = false
+        }
     }
 
     fun observeViewModel(){
         viewModel.studentsLD.observe(viewLifecycleOwner, Observer {
-            studenrListAdapter.updateStudentList(it)
+            studentListAdapter.updateStudentList(it)
         })
 
         viewModel.studentLoadErrorLD.observe(viewLifecycleOwner, Observer {
