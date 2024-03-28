@@ -8,6 +8,7 @@ import com.jubaya.studentapp.databinding.ClothListItemBinding
 import com.jubaya.studentapp.databinding.StudentListItemBinding
 import com.jubaya.studentapp.model.Cloth
 import com.jubaya.studentapp.model.Student
+import java.util.Arrays
 
 class ClothListAdapter(val clothList:ArrayList<Cloth>)
     : RecyclerView.Adapter<ClothListAdapter.ClothViewHolder>() {
@@ -27,15 +28,15 @@ class ClothListAdapter(val clothList:ArrayList<Cloth>)
     override fun onBindViewHolder(holder: ClothViewHolder, position: Int) {
         var listOfSize = ""
         clothList[position].sizes?.forEach{
-            listOfSize += "$it "
+            listOfSize += " $it "
         }
 
-        holder.binding.txtID.text = clothList[position].id
+        holder.binding.txtID.text = clothList[position].id + " :"
         holder.binding.txtType.text = clothList[position].type
-        holder.binding.txtCountry.text = clothList[position].brand?.country
+        holder.binding.txtCountry.text = clothList[position].brand?.country + " -"
         holder.binding.txtBrand.text = clothList[position].brand?.name
-        holder.binding.txtColor.text = clothList[position].color
-        holder.binding.txtSize.text = listOfSize
+        holder.binding.txtColor.text = "Color : " + clothList[position].color
+        holder.binding.txtSize.text = "Size : " + listOfSize + " "
     }
     fun updateClothList(newClothList:ArrayList<Cloth>){
         clothList.clear()
