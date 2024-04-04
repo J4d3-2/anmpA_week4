@@ -1,11 +1,15 @@
 package com.jubaya.studentapp.view
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.jubaya.studentapp.databinding.StudentListItemBinding
 import com.jubaya.studentapp.model.Student
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 
 class StudentListAdapter(val studentList:ArrayList<Student>)
     :RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>() {
@@ -29,6 +33,22 @@ class StudentListAdapter(val studentList:ArrayList<Student>)
             val action = StudentListFragmentDirections.actionStudentDetailFragment()
             Navigation.findNavController(it).navigate(action)
         }
+        val picasso = Picasso.Builder(holder.itemView.context)
+        picasso.listener { picasso, uri, exception ->
+            exception.printStackTrace()
+        }
+        picasso.build().load(studentList[position].photoUrl).into(holder.binding.imgStudent, object:Callback {
+            override fun onSuccess() {
+                holder.binding.progressImage.visibility = View.INVISIBLE
+                holder.binding.imgStudent.visibility = View.VISIBLE
+            }
+
+            override fun onError(e: Exception?) {
+                Log.e("picasso_error", e.toString())
+            }
+        }
+        )
+
     }
 
     fun updateStudentList(newStudentList:ArrayList<Student>){
