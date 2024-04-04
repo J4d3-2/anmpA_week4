@@ -12,6 +12,8 @@ import com.jubaya.studentapp.R
 import com.jubaya.studentapp.databinding.FragmentStudentDetailBinding
 import com.jubaya.studentapp.viewmodel.DetailViewModel
 import com.jubaya.studentapp.viewmodel.ListViewModel
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -32,9 +34,13 @@ class StudentDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var nrp = ""
+        if(arguments != null){
+            nrp = StudentDetailFragmentArgs.fromBundle(requireArguments()).nrp
+        }
 
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-        viewModel.refresh()
+        viewModel.refresh(nrp)
 
         observeViewModel()
     }
@@ -59,6 +65,23 @@ class StudentDetailFragment : Fragment() {
                             R.drawable.baseline_person_add_24)
                     }
             }
+
+            val picasso = Picasso.Builder(requireContext())
+            picasso.listener { picasso, uri, exception ->
+                exception.printStackTrace()
+            }
+            picasso.build().load(it.photoUrl).into(binding.imageView3, object:
+                Callback {
+                override fun onSuccess() {
+                    //binding.progressImage.visibility = View.INVISIBLE
+                    binding.imageView3.visibility = View.VISIBLE
+                }
+
+                override fun onError(e: Exception?) {
+                    Log.e("picasso_error", e.toString())
+                }
+            }
+            )
 
         })
         }

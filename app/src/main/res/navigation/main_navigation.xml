@@ -18,7 +18,11 @@
         android:id="@+id/studentDetailFragment"
         android:name="com.jubaya.studentapp.view.StudentDetailFragment"
         android:label="fragment_student_detail"
-        tools:layout="@layout/fragment_student_detail" />
+        tools:layout="@layout/fragment_student_detail" >
+        <argument
+            android:name="nrp"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/clothListFragment"
         android:name="com.jubaya.studentapp.view.ClothListFragment"
