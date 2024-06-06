@@ -12,7 +12,8 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
 class StudentListAdapter(val studentList:ArrayList<Student>)
-    :RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>() {
+    :RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>(),
+    ButtonDetailClickListener {
     class StudentViewHolder(var binding:StudentListItemBinding)
         :RecyclerView.ViewHolder(binding.root)
 
@@ -27,7 +28,7 @@ class StudentListAdapter(val studentList:ArrayList<Student>)
     }
 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
-        holder.binding.txtID.text = studentList[position].id
+        /*holder.binding.txtID.text = studentList[position].id
         holder.binding.txtName.text = studentList[position].name
         holder.binding.btnDetail.setOnClickListener {
             val action = StudentListFragmentDirections.actionStudentDetailFragment(studentList[position].id.toString())
@@ -47,8 +48,10 @@ class StudentListAdapter(val studentList:ArrayList<Student>)
                 Log.e("picasso_error", e.toString())
             }
         }
-        )
+        )*/
 
+        holder.binding.student = studentList[position]
+        holder.binding.listener = this
     }
 
     fun updateStudentList(newStudentList:ArrayList<Student>){
@@ -56,6 +59,12 @@ class StudentListAdapter(val studentList:ArrayList<Student>)
         studentList.addAll(newStudentList)
 
         notifyDataSetChanged()
+    }
+
+    override fun onButtonDetailClick(v: View) {
+        val id = v.tag.toString()
+        val action = StudentListFragmentDirections.actionStudentDetailFragment(id)
+        Navigation.findNavController(v).navigate(action)
     }
 
 }
