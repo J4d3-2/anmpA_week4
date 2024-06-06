@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.jubaya.studentapp.R
 import com.jubaya.studentapp.databinding.FragmentStudentDetailBinding
+import com.jubaya.studentapp.model.Student
 import com.jubaya.studentapp.viewmodel.DetailViewModel
 import com.jubaya.studentapp.viewmodel.ListViewModel
 import com.squareup.picasso.Callback
@@ -19,7 +21,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class StudentDetailFragment : Fragment() {
+class StudentDetailFragment : Fragment(), ButtonUpdateClickListener {
     private lateinit var binding:FragmentStudentDetailBinding
     private lateinit var viewModel:DetailViewModel
 
@@ -39,15 +41,19 @@ class StudentDetailFragment : Fragment() {
             nrp = StudentDetailFragmentArgs.fromBundle(requireArguments()).nrp
         }
 
+        binding.student = Student("", "", "", "", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG3GC5yabmHrqQH1XDx9x5OTF6M9xCTioE5A&s")
+
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         viewModel.refresh(nrp)
+
+        binding.listener = this
 
         observeViewModel()
     }
 
     fun observeViewModel(){
         viewModel.studentLD.observe(viewLifecycleOwner, Observer {
-            var student = it
+            /*var student = it
 
             binding.txtID.setText(it.id)
             binding.txtName.setText(it.name)
@@ -81,8 +87,12 @@ class StudentDetailFragment : Fragment() {
                     Log.e("picasso_error", e.toString())
                 }
             }
-            )
-
+            )*/
+            binding.student = it
         })
         }
+
+    override fun onButtonUpdateClick(v: View) {
+        Toast.makeText(context, "Updated?", Toast.LENGTH_SHORT).show()
+    }
 }
